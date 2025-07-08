@@ -3,7 +3,6 @@ import json
 from sklearn.metrics import accuracy_score, f1_score
 from nltk.translate.bleu_score import sentence_bleu
 from nltk.tokenize import word_tokenize
-import nltk
 
 
 def get_classifications_xray(data, predictions):
