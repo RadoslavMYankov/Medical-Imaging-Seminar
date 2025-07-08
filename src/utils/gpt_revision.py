@@ -44,7 +44,11 @@ def rank_caption_with_gpt(caption: str, label: str) -> Optional[int]:
         )
         
         rating = int(response.choices[0].message.content.strip())
-        return rating if 1 <= rating <= 5 else None
+        if 1 <= rating <= 5:
+            return rating
+        else:
+            print(f"Invalid rating received: {rating}. Expected 1-5.")
+            return None
         
     except Exception as e:
         print(f"Error calling GPT API: {e}")
