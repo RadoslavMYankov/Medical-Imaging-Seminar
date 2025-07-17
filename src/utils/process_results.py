@@ -69,8 +69,8 @@ def get_captions_mri(data, predictions):
         
     output = pd.DataFrame(output_data)
     print(output.head())
-    output.to_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_captions.csv", index=False)
-    print("Output saved to mri_captions.csv")
+    output.to_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_captions_v2.csv", index=False)
+    print("Output saved to mri_captions_v2.csv")
 
 def calculate_bleu_scores(captions_df):
     bleu_scores = []
@@ -101,18 +101,18 @@ if __name__ == "__main__":
     predictions = pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/xray_predictions_final_v2.csv")'''
     
     #get_classifications_xray(data, predictions)
-    xray_results=pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/xray_classifications_final.csv")
-    get_metrics_xray_classification(xray_results)
+    #xray_results=pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/xray_classifications_final.csv")
+    #get_metrics_xray_classification(xray_results)
 
-    #with open("/home/useradd/seminar/Mecial-Imaging-Seminar/src/data/nova_brain/annotations.json", "r") as f:
-        #data = json.load(f)
+    with open("/home/useradd/seminar/Mecial-Imaging-Seminar/src/data/nova_brain/annotations.json", "r") as f:
+        data = json.load(f)
 
-    #predictions = pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_descriptions.csv")
-    #get_captions_mri(data, predictions)
+    predictions = pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_descriptions_v2.csv")
+    get_captions_mri(data, predictions)
 
-    #mri_results = pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_captions.csv")
-    #bleu_scores = calculate_bleu_scores(mri_results)
-    #bleu_scores.to_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_bleu_scores.csv", index=False)
-    #print("BLEU scores saved to mri_bleu_scores.csv")
+    mri_results = pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_captions_v2.csv")
+    bleu_scores = calculate_bleu_scores(mri_results)
+    bleu_scores.to_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_bleu_scores_v2.csv", index=False)
+    print("BLEU scores saved to mri_bleu_scores_v2.csv")
 
     

@@ -54,7 +54,7 @@ def rank_caption_with_gpt(caption: str, label: str) -> Optional[int]:
         print(f"Error calling GPT API: {e}")
         return None
 
-results = pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_captions.csv")
+results = pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_captions_v2.csv")
 ratings = []
 
 for index, row in results.iterrows():
@@ -71,6 +71,6 @@ for index, row in results.iterrows():
 results['gpt_rating'] = ratings
 
 # Save back to the original CSV file
-results.to_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_captions.csv", index=False)
+results.to_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_captions_v2.csv", index=False)
 
 print("GPT ratings appended to original CSV file successfully!")
