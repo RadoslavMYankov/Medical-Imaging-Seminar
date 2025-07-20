@@ -7,10 +7,53 @@ import json
 import pandas as pd
 import re
 
-def extract_bbox_from_text(text):
+def validate_and_clip_bbox(bbox, image_width=None, image_height=None):
+    """
+    Validate and clip bounding box coordinates to image bounds.
+    
+    Args:
+        bbox: [x1, y1, x2, y2] bounding box coordinates
+        image_width: Width of the image (optional)
+        image_height: Height of the image (optional)
+    
+    Returns:
+        Valid bounding box clipped to image bounds, or None if invalid
+    """
+    if not bbox or len(bbox) != 4:
+        return None
+    
+    x1, y1, x2, y2 = bbox
+    
+    # Ensure x1 <= x2 and y1 <= y2
+    if x1 > x2:
+        x1, x2 = x2, x1
+    if y1 > y2:
+        y1, y2 = y2, y1
+    
+    # Clip to image bounds if provided
+    if image_width is not None:
+        x1 = max(0, min(x1, image_width))
+        x2 = max(0, min(x2, image_width))
+    
+    if image_height is not None:
+        y1 = max(0, min(y1, image_height))
+        y2 = max(0, min(y2, image_height))
+    
+    # Check if box still has valid area after clipping
+    if x2 <= x1 or y2 <= y1:
+        return None
+    
+    return [x1, y1, x2, y2]
+
+def extract_bbox_from_text(text, image_width=None, image_height=None):
     """
     Extract bounding box coordinates from text descriptions.
     Looks for patterns like (x1, y1, x2, y2) in the text.
+    
+    Args:
+        text: Text containing bounding box coordinates
+        image_width: Width of the image for validation (optional)
+        image_height: Height of the image for validation (optional)
     """
     # Pattern to match coordinates in parentheses
     pattern = r'\((\d+(?:\.\d+)?),\s*(\d+(?:\.\d+)?),\s*(\d+(?:\.\d+)?),\s*(\d+(?:\.\d+)?)\)'
@@ -19,12 +62,19 @@ def extract_bbox_from_text(text):
     if matches:
         # Take the first match and convert to floats
         x1, y1, x2, y2 = map(float, matches[0])
-        return [x1, y1, x2, y2]
+        bbox = [x1, y1, x2, y2]
+        # Validate and clip the bounding box
+        return validate_and_clip_bbox(bbox, image_width, image_height)
     return None
 
-def load_annotations(annotations_file):
+def load_annotations(annotations_file, image_width=None, image_height=None):
     """
     Load annotations from JSON file and extract bounding boxes by image name.
+    
+    Args:
+        annotations_file: Path to annotations JSON file
+        image_width: Width of images for validation (optional)
+        image_height: Height of images for validation (optional)
     """
     with open(annotations_file, 'r') as f:
         annotations = json.load(f)
@@ -45,7 +95,10 @@ def load_annotations(annotations_file):
                         image_bboxes = []
                         for bbox in bbox_list:
                             if isinstance(bbox, list) and len(bbox) == 4:
-                                image_bboxes.append(bbox)
+                                # Validate and clip the bounding box
+                                validated_bbox = validate_and_clip_bbox(bbox, image_width, image_height)
+                                if validated_bbox:
+                                    image_bboxes.append(validated_bbox)
                         
                         if image_bboxes:
                             # Use the actual image name as the key
@@ -53,9 +106,14 @@ def load_annotations(annotations_file):
     
     return bbox_data
 
-def load_predictions(predictions_file):
+def load_predictions(predictions_file, image_width=None, image_height=None):
     """
     Load predictions from CSV file and extract bounding boxes.
+    
+    Args:
+        predictions_file: Path to predictions CSV file
+        image_width: Width of images for validation (optional)
+        image_height: Height of images for validation (optional)
     """
     df = pd.read_csv(predictions_file)
     predictions = {}
@@ -64,7 +122,7 @@ def load_predictions(predictions_file):
         image_name = row['image']
         prediction_text = row['prediction']
         
-        bbox = extract_bbox_from_text(prediction_text)
+        bbox = extract_bbox_from_text(prediction_text, image_width, image_height)
         if bbox:
             predictions[image_name] = [bbox]  # Wrap in list for consistency
     
@@ -118,19 +176,31 @@ def compute_map_supervision(pred_boxes, pred_classes, true_boxes, true_classes):
         'map75': result.map75
     }
 
-def create_evaluation_csv(predictions_file, annotations_file, output_file):
+def create_evaluation_csv(predictions_file, annotations_file, output_file, image_width=None, image_height=None):
     """
     Create CSV file with image, ground truth, prediction, and mAP scores.
+    
+    Args:
+        predictions_file: Path to predictions CSV file
+        annotations_file: Path to annotations JSON file
+        output_file: Path to output CSV file
+        image_width: Width of images for bounding box validation (optional)
+        image_height: Height of images for bounding box validation (optional)
     """
     # Load data
-    predictions = load_predictions(predictions_file)
-    annotations = load_annotations(annotations_file)
+    predictions = load_predictions(predictions_file, image_width, image_height)
+    annotations = load_annotations(annotations_file, image_width, image_height)
     
     results = []
+    invalid_boxes_count = 0
     
     for image_name, pred_boxes in predictions.items():
         # Get ground truth boxes for this specific image
         true_boxes = annotations.get(image_name, [])
+        
+        # Count invalid boxes that were filtered out
+        if not pred_boxes and image_name in [row['image'] for _, row in pd.read_csv(predictions_file).iterrows()]:
+            invalid_boxes_count += 1
         
         # Compute mAP scores
         if pred_boxes and true_boxes:
@@ -154,6 +224,8 @@ def create_evaluation_csv(predictions_file, annotations_file, output_file):
     df = pd.DataFrame(results)
     df.to_csv(output_file, index=False)
     print(f"Results saved to {output_file}")
+    if invalid_boxes_count > 0:
+        print(f"Warning: {invalid_boxes_count} bounding boxes were invalid and filtered out")
     return df
 
 if __name__ == "__main__":
@@ -162,8 +234,16 @@ if __name__ == "__main__":
     annotations_file = "/home/useradd/seminar/Mecial-Imaging-Seminar/src/data/nova_brain/annotations.json"
     output_file = "/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_grounding_bboxes.csv"
     
+    # Optional: Set image dimensions for bounding box validation
+    # If you know the image dimensions, uncomment and set these values:
+    # IMAGE_WIDTH = 512   # Replace with actual image width
+    # IMAGE_HEIGHT = 512  # Replace with actual image height
+    IMAGE_WIDTH = None
+    IMAGE_HEIGHT = None
+    
     # Create evaluation CSV
-    results_df = create_evaluation_csv(predictions_file, annotations_file, output_file)
+    results_df = create_evaluation_csv(predictions_file, annotations_file, output_file, 
+                                     IMAGE_WIDTH, IMAGE_HEIGHT)
     
     # Display summary statistics
     print("\nSummary Statistics:")

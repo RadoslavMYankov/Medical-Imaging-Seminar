@@ -32,8 +32,8 @@ def get_classifications_xray(data, predictions):
     
     output = pd.DataFrame(output_data)
     #print(output.head())
-    output.to_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/xray_classifications_final_v2.csv", index=False)
-    print("Output saved to xray_classifications_final_v2.csv")
+    output.to_csv("C:\\Users\\evaka\\OneDrive\\Desktop\\rado\\Medical-Imaging-Seminar\\results\\xray_classifications.csv", index=False)
+    print("Output saved to xray_classifications.csv")
 
 def get_metrics_xray_classification(results):
     gt = results['label'].tolist()
@@ -96,15 +96,15 @@ def calculate_bleu_scores(captions_df):
     return pd.DataFrame(bleu_scores)
 
 if __name__ == "__main__":
-    '''with open("/home/useradd/seminar/Mecial-Imaging-Seminar/src/data/chest_xrays/annotations_len_50.json", "r") as f:
+    with open("C:\\Users\\evaka\\OneDrive\\Desktop\\rado\\Medical-Imaging-Seminar\\src\\data\\chest_xrays\\annotations_len_50.json", "r") as f:
         data = json.load(f)
-    predictions = pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/xray_predictions_final_v2.csv")'''
-    
-    #get_classifications_xray(data, predictions)
-    #xray_results=pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/xray_classifications_final.csv")
-    #get_metrics_xray_classification(xray_results)
+    predictions = pd.read_csv("C:\\Users\\evaka\\OneDrive\\Desktop\\rado\\Medical-Imaging-Seminar\\results\\xray_predictions.csv")
 
-    with open("/home/useradd/seminar/Mecial-Imaging-Seminar/src/data/nova_brain/annotations.json", "r") as f:
+    get_classifications_xray(data, predictions)
+    xray_results=pd.read_csv("C:\\Users\\evaka\\OneDrive\\Desktop\\rado\\Medical-Imaging-Seminar\\results\\xray_classifications.csv")
+    get_metrics_xray_classification(xray_results)
+
+    '''with open("/home/useradd/seminar/Mecial-Imaging-Seminar/src/data/nova_brain/annotations.json", "r") as f:
         data = json.load(f)
 
     predictions = pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_descriptions_v2.csv")
@@ -113,6 +113,6 @@ if __name__ == "__main__":
     mri_results = pd.read_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_captions_v2.csv")
     bleu_scores = calculate_bleu_scores(mri_results)
     bleu_scores.to_csv("/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_bleu_scores_v2.csv", index=False)
-    print("BLEU scores saved to mri_bleu_scores_v2.csv")
+    print("BLEU scores saved to mri_bleu_scores_v2.csv")'''
 
     
