@@ -54,13 +54,13 @@ def plot_average_llm_scores(merged_df):
     scores = [llava_mean, qwen_mean]
     
     # Define colors - light blue and light orange
-    colors = ['#87CEEB', '#FFB347']
+    colors = ['#FFB347', '#87CEEB']
     
     plt.figure(figsize=(8, 6))
     bars = plt.bar(models, scores, color=colors, alpha=0.8, 
                    edgecolor='black', linewidth=1)
     
-    plt.title('Average LLM Rating Comparison for MRI Captions', fontsize=14, fontweight='bold')
+    plt.title('Average LLM Rating for MRI Captions', fontsize=14, fontweight='bold')
     plt.ylabel('Average LLM Rating', fontsize=12)
     plt.ylim(0, max(scores) * 1.2)
     plt.grid(axis='y', alpha=0.3)
@@ -98,7 +98,7 @@ def plot_combined_histogram(merged_df):
                       palette=colors, edgecolor='black', linewidth=1,
                       shrink=0.6) 
     
-    plt.title('LLM Score Distribution Comparison for MRI Captions', fontsize=14, fontweight='bold')
+    plt.title('LLM Score Distribution for MRI Captions', fontsize=14, fontweight='bold')
     plt.xlabel('LLM Score', fontsize=12)
     plt.ylabel('Frequency', fontsize=12)
     
