@@ -42,10 +42,10 @@ def evaluate_with_gpt(diagnosis: str, label: str) -> Optional[int]:
         print(f"Error calling GPT API: {e}")
         return None
 
-results = pd.read_csv("/home/useradd/seminar/Medical-Imaging-Seminar/results/mri_predictions_diagnosis.csv")
+results = pd.read_csv("C:\\Users\\evaka\\OneDrive\\Desktop\\rado\\Medical-Imaging-Seminar\\results\\mri_predictions_diagnosis.csv")
 ratings = []
 
-with open("/home/useradd/seminar/Medical-Imaging-Seminar/src/data/nova_brain/annotations.json", 'r') as f:
+with open("C:\\Users\\evaka\\OneDrive\\Desktop\\rado\\Medical-Imaging-Seminar\\code\\data\\nova_brain\\annotations.json", 'r') as f:
     labels = json.load(f)
 
 # Add labels to results DataFrame
@@ -68,4 +68,4 @@ for index, row in results.iterrows():
 results['gpt_rating'] = ratings
 
 # Save back to the original CSV file
-results.to_csv("/home/useradd/seminar/Medical-Imaging-Seminar/results/mri_predictions_diagnosis.csv", index=False)
+results.to_csv("C:\\Users\\evaka\\OneDrive\\Desktop\\rado\\Medical-Imaging-Seminar\\results\\mri_predictions_diagnosis.csv", index=False)

@@ -230,9 +230,9 @@ def create_evaluation_csv(predictions_file, annotations_file, output_file, image
 
 if __name__ == "__main__":
     # File paths
-    predictions_file = "/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_predictions_grounding.csv"
-    annotations_file = "/home/useradd/seminar/Mecial-Imaging-Seminar/src/data/nova_brain/annotations.json"
-    output_file = "/home/useradd/seminar/Mecial-Imaging-Seminar/results/mri_grounding_bboxes.csv"
+    predictions_file = "C:\\Users\\evaka\\OneDrive\\Desktop\\rado\\Medical-Imaging-Seminar\\results\\mri_predictions_grounding.csv"
+    annotations_file = "C:\\Users\\evaka\\OneDrive\\Desktop\\rado\\Medical-Imaging-Seminar\\code\\data\\nova_brain\\annotations.json"
+    output_file = "C:\\Users\\evaka\\OneDrive\\Desktop\\rado\\Medical-Imaging-Seminar\\results\\mri_grounding_bboxes.csv"
     
     # Optional: Set image dimensions for bounding box validation
     # If you know the image dimensions, uncomment and set these values:
