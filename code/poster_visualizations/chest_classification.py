@@ -49,8 +49,8 @@ def plot_metrics_comparison(llava_metrics, qwen_metrics):
     
     # Accuracy plot
     bars1 = ax1.bar(models, accuracies, color=colors, alpha=0.8, edgecolor='black', linewidth=1)
-    ax1.set_title('Accuracy Comparison', fontsize=14, fontweight='bold')
-    ax1.set_ylabel('Accuracy', fontsize=12)
+    ax1.set_title('Accuracy Comparison', fontsize=18, fontweight='bold')
+    ax1.set_ylabel('Accuracy', fontsize=16)
     ax1.set_ylim(0, 1)
     ax1.grid(axis='y', alpha=0.3)
     
@@ -63,8 +63,8 @@ def plot_metrics_comparison(llava_metrics, qwen_metrics):
     
     # F1 Score plot
     bars2 = ax2.bar(models, f1_scores, color=colors, alpha=0.8, edgecolor='black', linewidth=1)
-    ax2.set_title('F1 Score Comparison', fontsize=14, fontweight='bold')
-    ax2.set_ylabel('F1 Score', fontsize=12)
+    ax2.set_title('F1 Score Comparison', fontsize=18, fontweight='bold')
+    ax2.set_ylabel('F1 Score', fontsize=16)
     ax2.set_ylim(0, 1)
     ax2.grid(axis='y', alpha=0.3)
     
@@ -87,20 +87,24 @@ def plot_confusion_matrices(merged_df):
     cm_llava = confusion_matrix(merged_df['label'], merged_df['prediction'])
     sns.heatmap(cm_llava, annot=True, fmt='d', cmap='Oranges', 
                 xticklabels=['Healthy', 'Unhealthy'], 
-                yticklabels=['Healthy', 'Unhealthy'], ax=ax1)
-    ax1.set_title('LLaVA-Med Confusion Matrix', fontweight='bold')
-    ax1.set_ylabel('True Label')
-    ax1.set_xlabel('Predicted Label')
+                yticklabels=['Healthy', 'Unhealthy'], ax=ax1,
+                annot_kws={'size': 16})
+    ax1.set_title('LLaVA-Med Confusion Matrix', fontweight='bold', fontsize=18)
+    ax1.set_ylabel('True Label', fontsize=16)
+    ax1.set_xlabel('Predicted Label', fontsize=16)
+    ax1.tick_params(axis='both', which='major', labelsize=14)
     
     # Qwen confusion matrix
     cm_qwen = confusion_matrix(merged_df['label'], merged_df['qwen_prediction'])
     sns.heatmap(cm_qwen, annot=True, fmt='d', cmap='Blues',
                 xticklabels=['Healthy', 'Unhealthy'], 
-                yticklabels=['Healthy', 'Unhealthy'], ax=ax2)
-    ax2.set_title('Qwen-2.5 Confusion Matrix', fontweight='bold')
-    ax2.set_ylabel('True Label')
-    ax2.set_xlabel('Predicted Label')
-    
+                yticklabels=['Healthy', 'Unhealthy'], ax=ax2,
+                annot_kws={'size': 16})
+    ax2.set_title('Qwen-2.5 Confusion Matrix', fontweight='bold', fontsize=18)
+    ax2.set_ylabel('True Label', fontsize=16)
+    ax2.set_xlabel('Predicted Label', fontsize=16)
+    ax2.tick_params(axis='both', which='major', labelsize=14)
+
     plt.tight_layout()
     plt.show()
     return fig

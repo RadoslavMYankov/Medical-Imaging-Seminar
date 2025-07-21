@@ -60,8 +60,8 @@ def plot_average_llm_scores(merged_df):
     bars = plt.bar(models, scores, color=colors, alpha=0.8, 
                    edgecolor='black', linewidth=1)
     
-    plt.title('Average LLM Rating for MRI Captions', fontsize=14, fontweight='bold')
-    plt.ylabel('Average LLM Rating', fontsize=12)
+    plt.title('Average LLM Rating for MRI Captions', fontsize=18, fontweight='bold')
+    plt.ylabel('Average LLM Rating', fontsize=16)
     plt.ylim(0, max(scores) * 1.2)
     plt.grid(axis='y', alpha=0.3)
     
@@ -97,11 +97,11 @@ def plot_combined_histogram(merged_df):
                       bins=np.arange(0.5, 5.5, 1), alpha=0.8, multiple='dodge',
                       palette=colors, edgecolor='black', linewidth=1,
                       shrink=0.6) 
-    
-    plt.title('LLM Score Distribution for MRI Captions', fontsize=14, fontweight='bold')
-    plt.xlabel('LLM Score', fontsize=12)
-    plt.ylabel('Frequency', fontsize=12)
-    
+
+    plt.title('LLM Score Distribution for MRI Captions', fontsize=18, fontweight='bold')
+    plt.xlabel('LLM Score', fontsize=16)
+    plt.ylabel('Frequency', fontsize=16)
+
     # Set x-axis ticks in the middle of the grouped bars
     plt.xticks([1, 2, 3, 4], ['1', '2', '3', '4'])
     plt.xlim(0.5, 4.5)
@@ -109,7 +109,7 @@ def plot_combined_histogram(merged_df):
     plt.grid(axis='y', alpha=0.3)
     
     # Ensure legend shows with correct labels
-    plt.legend(title='Model', labels=['Qwen-2.5', 'LLaVA-Med'], fontsize=10)
+    plt.legend(title='Model', labels=['Qwen-2.5', 'LLaVA-Med'], fontsize=14)
     
     # Add count labels on bars
     for container in ax.containers:
@@ -120,7 +120,7 @@ def plot_combined_histogram(merged_df):
                 labels.append(f'{int(height)}')
             else:
                 labels.append('')
-        ax.bar_label(container, labels=labels, fontsize=9)
+        ax.bar_label(container, labels=labels, fontsize=14)
     
     plt.tight_layout()
     plt.show()

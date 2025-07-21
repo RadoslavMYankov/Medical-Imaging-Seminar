@@ -272,10 +272,11 @@ def plot_overall_map_comparison(image_results_df):
                      palette=colors, alpha=0.8, edgecolor='black', linewidth=1,
                      hue_order=['LLaVA-Med', 'Qwen-2.5'])
 
-    plt.title('Overall mAP Score for MRI Detection', fontsize=16, fontweight='bold')
-    plt.ylabel('mAP Score', fontsize=14)
+    plt.title('Overall mAP Score for MRI Detection', fontsize=18, fontweight='bold')
+    plt.ylabel('mAP Score', fontsize=16)
     plt.grid(axis='y', alpha=0.3)
-    plt.legend(title='Model', fontsize=14)
+    plt.legend(title='Model', fontsize=16)
+    plt.xticks(fontsize=14)
     
     # Add value labels on bars (only for non-zero values)
     for container in ax.containers:
@@ -286,7 +287,7 @@ def plot_overall_map_comparison(image_results_df):
                 labels.append(f'{height:.3f}')
             else:
                 labels.append('')
-        ax.bar_label(container, labels=labels, fontsize=9)
+        ax.bar_label(container, labels=labels, fontsize=14)
     
     plt.tight_layout()
     plt.show()

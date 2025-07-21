@@ -272,12 +272,12 @@ def plot_map_scores_per_disease(disease_results_df):
     ax = sns.barplot(data=plot_df, x='Disease', y='mAP@50', hue='Model', 
                      palette=colors, alpha=0.8, edgecolor='black', linewidth=1)
     
-    plt.title('mAP@50 Score Comparison by Disease', fontsize=16, fontweight='bold')
-    plt.xlabel('Disease', fontsize=12)
-    plt.ylabel('mAP@50 Score', fontsize=12)
-    plt.xticks(rotation=45, ha='right')
+    plt.title('mAP@50 Score Comparison by Disease', fontsize=18, fontweight='bold')
+    plt.xlabel('Disease', fontsize=16)
+    plt.ylabel('mAP@50 Score', fontsize=16)
+    plt.xticks(rotation=45, ha='right', fontsize=14)
     plt.grid(axis='y', alpha=0.3)
-    plt.legend(title='Model', fontsize=10)
+    plt.legend(title='Model', fontsize=14)
     
     # Add value labels on bars (only for non-zero values)
     for container in ax.containers:
@@ -288,7 +288,7 @@ def plot_map_scores_per_disease(disease_results_df):
                 labels.append(f'{height:.3f}')
             else:
                 labels.append('')
-        ax.bar_label(container, labels=labels, fontsize=8)
+        ax.bar_label(container, labels=labels, fontsize=14)
     
     plt.tight_layout()
     plt.show()
@@ -325,11 +325,12 @@ def plot_overall_map_comparison(disease_results_df):
     ax = sns.barplot(data=plot_df, x='Metric', y='Score', hue='Model', 
                      palette=colors, alpha=0.8, edgecolor='black', linewidth=1)
     
-    plt.title('Overall mAP Score Comparison', fontsize=14, fontweight='bold')
-    plt.ylabel('mAP Score', fontsize=12)
+    plt.title('Overall mAP Score Comparison', fontsize=18, fontweight='bold')
+    plt.ylabel('mAP Score', fontsize=16)
     plt.grid(axis='y', alpha=0.3)
-    plt.legend(title='Model', fontsize=10)
-    
+    plt.xticks(fontsize=14)
+    plt.legend(title='Model', fontsize=14)
+
     # Add value labels on bars (only for non-zero values)
     for container in ax.containers:
         labels = []
@@ -339,8 +340,8 @@ def plot_overall_map_comparison(disease_results_df):
                 labels.append(f'{height:.3f}')
             else:
                 labels.append('')
-        ax.bar_label(container, labels=labels, fontsize=9)
-    
+        ax.bar_label(container, labels=labels, fontsize=14)
+
     plt.tight_layout()
     plt.show()
     return plt.gcf()
